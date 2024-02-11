@@ -3,13 +3,50 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login']]);
+        $this->middleware('auth:api', ['except' => ['login', 'register']]);
+    }
+
+    public function register(Request $request)
+    {
+        try {
+            $validatedData = $request->validate([
+                'firstName' => 'required|string|max:255',
+                'lastName' => 'required|string|max:255',
+                'username' => 'required|string|unique:users|min:4',
+                'phone' => 'required|string|unique:users|min:8|max:8',
+                'email' => 'required|email|unique:users|max:255',
+                'password' => 'required|string|min:8',
+            ]);
+
+            $user = User::create([
+                'first_name' => $validatedData['firstName'],
+                'last_name' => $validatedData['lastName'],
+                'username' => $validatedData['username'],
+                'phone' => $validatedData['phone'],
+                'email' => $validatedData['email'],
+                'password' => Hash::make($validatedData['password']),
+            ]);
+
+
+            return response()->json([
+                'status' => "OK",
+                'data' => $user
+            ], 201);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'status' => 'ERROR',
+                'message' => 'Validation failed',
+                'errors' => $e->errors(),
+            ], 422);
+        }
     }
 
     public function login()
