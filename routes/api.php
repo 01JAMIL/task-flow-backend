@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\User\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -14,12 +16,22 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+/* Route::middleware('auth')->get('/user', function (Request $request) {
     return $request->user();
 });
+ */
+// User routes
+Route::middleware('auth')->prefix('/users')->group(function () {
+    Route::get('all', [UserController::class, 'index']);
+});
+// Auth routes
 
-
-// A route that returns a json response with a message
-Route::get('/', function () {
-    return response()->json(['message' => 'Welcome to task flow']);
+Route::group([
+    'middleware' => 'api',
+    'prefix' => 'auth'
+], function ($router) {
+    Route::post('login', [AuthController::class, 'login']);
+    Route::post('logout', [AuthController::class, 'logout']);
+    Route::post('refresh', [AuthController::class, 'refresh']);
+    Route::get('me', [AuthController::class, 'me']);
 });
