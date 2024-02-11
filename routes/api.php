@@ -16,16 +16,18 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-/* Route::middleware('auth')->get('/user', function (Request $request) {
-    return $request->user();
-});
- */
-// User routes
-Route::middleware('auth')->prefix('/users')->group(function () {
-    Route::get('all', [UserController::class, 'index']);
-});
-// Auth routes
 
+// User routes
+Route::group([
+    'middleware' => 'auth',
+    'prefix' => 'users'
+], function ($router) {
+    Route::get('all', [UserController::class, 'getAllUsers']);
+    Route::put('update/{id}', [UserController::class, 'updateUser']);
+});
+
+
+// Auth routes
 Route::group([
     'middleware' => 'api',
     'prefix' => 'auth'
