@@ -47,4 +47,12 @@ class User extends Authenticatable implements JWTSubject
     {
         return [];
     }
+
+
+    public function workspaces()
+    {
+        return $this->belongsToMany(Workspace::class, 'user_workspace_link')
+            ->withPivot(['join_date', 'role'])
+            ->withTimestamps();
+    }
 }

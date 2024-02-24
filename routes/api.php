@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\User\UserController;
+use App\Http\Controllers\Workspace\WorkspaceController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -26,6 +27,16 @@ Route::group([
     Route::put('update/{id}', [UserController::class, 'updateUser']);
 });
 
+
+// Workspace routes
+Route::group([
+    'middleware' => 'auth',
+    'prefix' => 'workspaces'
+], function ($router) {
+    Route::get('all', [WorkspaceController::class, 'getWorkspaces']);
+    Route::get('one/{id}', [WorkspaceController::class, 'getWorkspaceById']);
+    Route::post('create', [WorkspaceController::class, 'createWorkspace']);
+});
 
 // Auth routes
 Route::group([
