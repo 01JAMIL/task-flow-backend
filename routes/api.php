@@ -35,7 +35,11 @@ Route::group([
 ], function ($router) {
     Route::get('all', [WorkspaceController::class, 'getWorkspaces']);
     Route::get('one/{id}', [WorkspaceController::class, 'getWorkspaceById']);
+    Route::get('members/{id}', [WorkspaceController::class, 'getWorkspaceMembers']);
     Route::post('create', [WorkspaceController::class, 'createWorkspace']);
+    Route::put('update/{id}', [WorkspaceController::class, 'updateWorkspace']);
+    Route::put('new-member/{id}', [WorkspaceController::class, 'addMemberToWorkspace']);
+    Route::delete('delete/{id}', [WorkspaceController::class, 'deleteWorkspace']);
 });
 
 // Auth routes
