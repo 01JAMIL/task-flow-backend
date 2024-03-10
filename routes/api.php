@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Board\BoardController;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\Workspace\WorkspaceController;
 use Illuminate\Http\Request;
@@ -40,6 +41,17 @@ Route::group([
     Route::put('update/{id}', [WorkspaceController::class, 'updateWorkspace']);
     Route::put('new-member/{id}', [WorkspaceController::class, 'addMemberToWorkspace']);
     Route::delete('delete/{id}', [WorkspaceController::class, 'deleteWorkspace']);
+});
+
+// Board routes
+Route::group([
+    'middleware' => 'auth',
+    'prefix' => 'boards'
+], function ($router) {
+    Route::get('all/{id}', [BoardController::class, 'getBoards']);
+    Route::post('create/{id}', [BoardController::class, 'createBoard']);
+    Route::put('update/{id}', [BoardController::class, 'updateBoard']);
+    Route::delete('delete/{id}', [BoardController::class, 'deleteBoard']);
 });
 
 // Auth routes

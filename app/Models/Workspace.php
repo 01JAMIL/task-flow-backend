@@ -29,4 +29,9 @@ class Workspace extends Model
             ->withPivot(['join_date', 'role'])
             ->withTimestamps();
     }
+
+    public function boards()
+    {
+        return $this->hasMany(Board::class);
+    }
 }
