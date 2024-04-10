@@ -15,4 +15,9 @@ class Board extends Model
     {
         return $this->belongsTo(Workspace::class);
     }
+
+    public function tasks()
+    {
+        return $this->hasMany(Task::class);
+    }
 }

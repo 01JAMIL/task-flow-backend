@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Board\BoardController;
+use App\Http\Controllers\Task\TaskController;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\Workspace\WorkspaceController;
 use Illuminate\Http\Request;
@@ -52,6 +53,16 @@ Route::group([
     Route::post('create/{id}', [BoardController::class, 'createBoard']);
     Route::put('update/{id}', [BoardController::class, 'updateBoard']);
     Route::delete('delete/{id}', [BoardController::class, 'deleteBoard']);
+});
+
+// Task routes
+Route::group([
+    'middleware' => 'auth',
+    'prefix' => 'tasks'
+], function ($router) {
+    Route::post('create/{id}', [TaskController::class, 'createTask']);
+    Route::put('update/{id}/task/{taskId}', [TaskController::class, 'updateTask']);
+    Route::delete('delete/{id}/task/{taskId}', [TaskController::class, 'deleteTask']);
 });
 
 // Auth routes

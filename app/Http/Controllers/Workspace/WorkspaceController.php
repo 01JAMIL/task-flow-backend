@@ -20,12 +20,12 @@ class WorkspaceController extends Controller
                 'data' => $user->workspaces
             ]);
 
-        } catch (\Illuminate\Validation\ValidationException $e) {
+        } catch (\Exception $e) {
             return response()->json([
                 'status' => 'ERROR',
-                'message' => 'Validation failed',
-                'errors' => $e->errors(),
-            ], 422);
+                'message' => 'An error occurred',
+                'details' => $e->getMessage(),
+            ], 500);
         }
     }
 
@@ -45,12 +45,12 @@ class WorkspaceController extends Controller
                 'data' => $workspace
             ]);
 
-        } catch (\Illuminate\Validation\ValidationException $e) {
+        } catch (\Exception $e) {
             return response()->json([
                 'status' => 'ERROR',
-                'message' => 'Validation failed',
-                'errors' => $e->errors(),
-            ], 422);
+                'message' => 'An error occurred',
+                'details' => $e->getMessage(),
+            ], 500);
         }
     }
 
@@ -71,12 +71,12 @@ class WorkspaceController extends Controller
                 'data' => $workspace->users
             ]);
 
-        } catch (\Illuminate\Validation\ValidationException $e) {
+        } catch (\Exception $e) {
             return response()->json([
                 'status' => 'ERROR',
-                'message' => 'Validation failed',
-                'errors' => $e->errors(),
-            ], 422);
+                'message' => 'An error occurred',
+                'details' => $e->getMessage(),
+            ], 500);
         }
     }
     public function createWorkspace(Request $request)
@@ -108,6 +108,12 @@ class WorkspaceController extends Controller
                 'message' => 'Validation failed',
                 'errors' => $e->errors(),
             ], 422);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'ERROR',
+                'message' => 'An error occurred',
+                'details' => $e->getMessage(),
+            ], 500);
         }
     }
 
@@ -143,6 +149,12 @@ class WorkspaceController extends Controller
                 'message' => 'Validation failed',
                 'errors' => $e->errors(),
             ], 422);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'ERROR',
+                'message' => 'An error occurred',
+                'details' => $e->getMessage(),
+            ], 500);
         }
     }
 
@@ -165,12 +177,12 @@ class WorkspaceController extends Controller
                 'message' => 'Workspace deleted'
             ]);
 
-        } catch (\Illuminate\Validation\ValidationException $e) {
+        } catch (\Exception $e) {
             return response()->json([
                 'status' => 'ERROR',
-                'message' => 'Validation failed',
-                'errors' => $e->errors(),
-            ], 422);
+                'message' => 'An error occurred',
+                'details' => $e->getMessage(),
+            ], 500);
         }
     }
 
@@ -212,6 +224,12 @@ class WorkspaceController extends Controller
                 'message' => 'Validation failed',
                 'errors' => $e->errors(),
             ], 422);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'ERROR',
+                'message' => 'An error occurred',
+                'details' => $e->getMessage(),
+            ], 500);
         }
     }
 }

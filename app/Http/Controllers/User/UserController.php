@@ -39,7 +39,7 @@ class UserController extends Controller
                 ], 404);
             }
 
-            
+
             $user->update($validatedData);
 
             return response()->json([
@@ -52,6 +52,12 @@ class UserController extends Controller
                 'message' => 'Validation failed',
                 'errors' => $e->errors(),
             ], 422);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'ERROR',
+                'message' => 'An error occurred',
+                'details' => $e->getMessage(),
+            ], 500);
         }
     }
 }

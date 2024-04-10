@@ -25,17 +25,18 @@ class BoardController extends Controller
                 ], 404);
             }
 
-            $boards = Board::where('workspace_id', $id)->get();
+            $boards = Board::with('tasks')->where('workspace_id', $id)->get();
+
             return response()->json([
                 'status' => "OK",
                 'data' => $boards
             ]);
-        } catch (\Illuminate\Validation\ValidationException $e) {
+        } catch (\Exception $e) {
             return response()->json([
                 'status' => 'ERROR',
-                'message' => 'Validation failed',
-                'errors' => $e->errors(),
-            ], 422);
+                'message' => 'An error occurred',
+                'details' => $e->getMessage(),
+            ], 500);
         }
     }
 
@@ -71,6 +72,12 @@ class BoardController extends Controller
                 'message' => 'Validation failed',
                 'errors' => $e->errors(),
             ], 422);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'ERROR',
+                'message' => 'An error occurred',
+                'details' => $e->getMessage(),
+            ], 500);
         }
     }
 
@@ -95,13 +102,13 @@ class BoardController extends Controller
 
             $board->save();
 
-           /*  $board->update($validatedData); */
+            /*  $board->update($validatedData); */
 
             return response()->json([
                 'status' => "OK",
                 'data' => $board
             ]);
-            
+
 
         } catch (\Illuminate\Validation\ValidationException $e) {
             return response()->json([
@@ -109,6 +116,12 @@ class BoardController extends Controller
                 'message' => 'Validation failed',
                 'errors' => $e->errors(),
             ], 422);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'ERROR',
+                'message' => 'An error occurred',
+                'details' => $e->getMessage(),
+            ], 500);
         }
     }
 
@@ -116,7 +129,7 @@ class BoardController extends Controller
     {
         try {
             $board = Board::find($id);
-            
+
             if (!$board) {
                 return response()->json([
                     'status' => 'ERROR',
@@ -131,12 +144,12 @@ class BoardController extends Controller
                 'message' => "Board deleted"
             ]);
 
-        } catch (\Illuminate\Validation\ValidationException $e) {
+        } catch (\Exception $e) {
             return response()->json([
                 'status' => 'ERROR',
-                'message' => 'Validation failed',
-                'errors' => $e->errors(),
-            ], 422);
+                'message' => 'An error occurred',
+                'details' => $e->getMessage(),
+            ], 500);
         }
     }
 }
