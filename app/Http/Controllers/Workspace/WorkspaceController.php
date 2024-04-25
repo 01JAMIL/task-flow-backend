@@ -198,6 +198,15 @@ class WorkspaceController extends Controller
                 ], 404);
             }
 
+            // Check if the authenticated user is the owner of the workspace
+            $workspaceUser = $workspace->pivot;
+            if ($workspaceUser->role !== 'OWNER') {
+                return response()->json([
+                    'status' => 'ERROR',
+                    'message' => 'You do not have permission to add members to this workspace',
+                ], 403);
+            }
+
             $rules = [
                 'email' => 'required|email|exists:users,email',
                 'role' => 'required|string|in:MEMBER,ADMIN',
@@ -207,6 +216,17 @@ class WorkspaceController extends Controller
 
             $newUser = User::where('email', $validatedData['email'])->first();
 
+            // Check if the user is already a member of the workspace
+
+            $isMember = $workspace->users()->where('user_id', $newUser->id)->exists();
+            if ($isMember) {
+                return response()->json([
+                    'status' => 'ERROR',
+                    'message' => 'User is already a member of the workspace',
+                ], 400);
+            }
+
+
             $user->workspaces()->attach($workspace, [
                 'join_date' => now(),
                 'user_id' => $newUser->id,
@@ -215,7 +235,8 @@ class WorkspaceController extends Controller
 
             return response()->json([
                 'status' => "OK",
-                'message' => 'User added to workspace'
+                'message' => 'User added to workspace',
+                'data' => $newUser
             ]);
 
         } catch (\Illuminate\Validation\ValidationException $e) {
