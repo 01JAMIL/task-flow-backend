@@ -97,9 +97,11 @@ class WorkspaceController extends Controller
                 'role' => 'OWNER',
             ]);
 
+            $selectedWorkspace = $user->workspaces()->find($workspace->id);
+
             return response()->json([
                 'status' => "OK",
-                'data' => $workspace
+                'data' => $selectedWorkspace
             ]);
 
         } catch (\Illuminate\Validation\ValidationException $e) {
